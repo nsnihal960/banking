@@ -4,9 +4,10 @@ import com.google.inject.Singleton;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
+import banking.api.dto.response.Mobile;
 import banking.api.dto.response.Profile;
 import banking.api.dto.response.PublicProfile;
 import banking.dao.dataobject.ProfileDO;
@@ -15,9 +16,10 @@ import banking.mappers.ProfileMapper;
 @Singleton
 public class ProfileDao {
     //short circuiting database here
-    private Map<String, ProfileDO> profileMap = new ConcurrentHashMap<>(1000);
-    private Map<String, String> emailMap = new HashMap<>(1000);
-    private Map<String, String> mobileMap = new HashMap<>(1000);
+    private Map<Long, ProfileDO> profileMap = new ConcurrentHashMap<>(1000);
+    private Map<String, Long> emailMap = new HashMap<>(1000);
+    private Map<Mobile, Long> mobileMap = new HashMap<>(1000);
+    private AtomicLong counter = new AtomicLong(0);
 
     public ProfileDO createUser(PublicProfile publicProfile) {
         Profile profile = getPrivateProfile(publicProfile);
@@ -28,20 +30,20 @@ public class ProfileDao {
         return profileDO;
     }
 
-    public ProfileDO getUserById(String id) {
+    public ProfileDO getUserById(Long id) {
         return profileMap.get(id);
     }
 
     public ProfileDO getUserByEmail(String email) {
-        String userId = emailMap.get(email);
+        Long userId = emailMap.get(email);
         if (userId == null) {
             return null;
         }
         return profileMap.get(userId);
     }
 
-    public ProfileDO getUserByMobile(String mobile) {
-        String userId = mobileMap.get(mobile);
+    public ProfileDO getUserByMobile(Mobile mobile) {
+        Long userId = mobileMap.get(mobile);
         if (userId == null) {
             return null;
         }
@@ -49,10 +51,7 @@ public class ProfileDao {
     }
 
     private Profile getPrivateProfile(PublicProfile publicProfile) {
-        String userId = UUID.randomUUID().toString();
-        while (profileMap.containsKey(userId)) {
-            userId = UUID.randomUUID().toString();
-        }
+        Long userId = counter.addAndGet(1);
         return new Profile(userId, publicProfile);
     }
 }

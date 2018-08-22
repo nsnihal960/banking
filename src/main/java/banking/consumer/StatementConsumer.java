@@ -5,7 +5,6 @@ import com.google.inject.Singleton;
 
 import java.util.List;
 
-import banking.api.dto.response.Balance;
 import banking.api.dto.response.Profile;
 import banking.api.dto.response.Statement;
 import banking.dao.StatementDao;
@@ -28,14 +27,14 @@ public class StatementConsumer {
         this.transactionDao = transactionDao;
     }
 
-    public void addTransaction(String userId, TransactionDO transaction){
+    public void addTransaction(Long userId, TransactionDO transaction){
         Profile user = profileConsumer.getUserById(userId);
         statementDao.addTransaction(user, transaction);
     }
 
-    public Statement getStatement(String userId){
-        Profile user = profileConsumer.getUserById(userId);
-        List<TransactionDO> transactions = statementDao.getTransaction(user);
+    public Statement getStatement(Long id, Long startTime, Long endTime, Integer pageCount){
+        Profile user = profileConsumer.getUserById(id);
+        List<TransactionDO> transactions = statementDao.getTrimmedTransactions(user,startTime,endTime,pageCount);
         BalanceDO balance = transactionDao.getOrCreateBalance(user);
         return StatementMapper.toStatementDto(
                 user,

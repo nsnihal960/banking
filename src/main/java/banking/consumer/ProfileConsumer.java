@@ -6,6 +6,7 @@ import com.google.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import banking.api.dto.response.Mobile;
 import banking.api.dto.response.Profile;
 import banking.api.dto.response.PublicProfile;
 import banking.api.dto.response.exception.NotFound;
@@ -37,7 +38,7 @@ public class ProfileConsumer {
         return ProfileMapper.profileDoToDto(privateProfile);
     }
 
-    public Profile getUserById(String userId){
+    public Profile getUserById(Long userId){
         ProfileDO privateProfile = profileDao.getUserById(userId);
         if(privateProfile == null){
             throw new NotFound("User Id cannot be located! ");
@@ -53,7 +54,7 @@ public class ProfileConsumer {
         return ProfileMapper.profileDoToDto(privateProfile);
     }
 
-    public Profile getUserByMobile(String mobile){
+    public Profile getUserByMobile(Mobile mobile){
         ProfileDO privateProfile = profileDao.getUserByMobile(mobile);
         if(privateProfile == null){
             throw new NotFound("User Id cannot be located! ");

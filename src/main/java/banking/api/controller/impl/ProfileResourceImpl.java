@@ -3,13 +3,12 @@ package banking.api.controller.impl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import javax.ws.rs.core.Context;
+import javax.validation.Valid;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 
 import banking.api.controller.ProfileResource;
 import banking.api.dto.request.CreateProfileRequest;
+import banking.api.dto.response.Mobile;
 import banking.api.dto.response.Profile;
 import banking.consumer.ProfileConsumer;
 
@@ -23,28 +22,22 @@ public class ProfileResourceImpl implements ProfileResource {
     }
 
     @Override
-    public Response getProfileById(String id) {
+    public Response getProfileById(Long id) {
         return Response.status(200)
                 .entity(profileConsumer.getUserById(id))
                 .build();
     }
 
     @Override
-    public Response getProfileByMobile(String mobile) {
+    public Response getProfileByMobile(Mobile mobile) {
         return Response.status(200)
                 .entity(profileConsumer.getUserByMobile(mobile))
                 .build();
     }
 
     @Override
-    public Response getProfileByEmail(String email) {
-        return Response.status(200)
-                .entity(profileConsumer.getUserByEmail(email))
-                .build();
-    }
-
-    @Override
-    public Response createProfile(CreateProfileRequest request) {
+    public Response createProfile(@Valid CreateProfileRequest request) {
+        request.validate();
         Profile profile = profileConsumer.createUser(request.profile);
         return Response.status(201)
                 .entity(profile)

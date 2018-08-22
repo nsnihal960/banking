@@ -3,17 +3,20 @@ package banking.api.dto.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotNull;
+
 public class PublicProfile implements Response {
+    @NotNull
     public final Name name;
     public final String email;
-    public final String mobile;
+    public final Mobile mobile;
     public final String currency;
 
     @JsonCreator
-    public PublicProfile(@JsonProperty("name") Name name,
-                         @JsonProperty("email") String email,
-                         @JsonProperty("mobile") String mobile,
-                         @JsonProperty("currency") String currency) {
+    public PublicProfile(@NotNull @JsonProperty("name") Name name,
+                         @NotNull @JsonProperty("email") String email,
+                         @NotNull @JsonProperty("mobile") Mobile mobile,
+                         @NotNull @JsonProperty("currency") String currency) {
         this.name = name;
         this.email = email;
         this.mobile = mobile;

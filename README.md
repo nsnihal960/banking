@@ -31,6 +31,10 @@ curl -X POST http://localhost:8080/profile/create
     "firstName":"Nihal",
     "lastName":"Srivastava"
   },
+  "mobile":{
+      "countryCode":"91",
+      "number":"8004968195"
+  },
   "email":"nsnihal960@gmail.com",
   "mobile":"8004968195",
   "currency":"INR"
@@ -39,12 +43,18 @@ curl -X POST http://localhost:8080/profile/create
 ```
 
 #### Response
+IsVerified is short circuited, but should be used to allow any transaction from/to this profile.
 ```json
 {
     "id": "e63b26ed-8105-4608-8b8b-3e7368add5a5",
     "name": {
         "firstName": "Nihal",
         "lastName": "Srivastava"
+    },
+    "mobile": {
+        "countryCode": "91",
+        "number": "8004968195",
+        "isVerified": true
     },
     "email": "nsnihal960@gmail.com",
     "mobile": "8004968195",
@@ -57,73 +67,82 @@ curl -X POST http://localhost:8080/profile/create
 
 ``curl -X GET http://localhost:8080/profile/id/{id}/``
 
-``curl -X GET http://localhost:8080/profile/mobile/{mobile}/``
-
-``curl -X GET http://localhost:8080/profile/email/{email}/``
-
+``curl -X POST http://localhost:8080/profile/mobile/{mobile}/``
+```json
+{
+    "countryCode":"91",
+    "number":"8004968195"
+}
+```
 # Statement
 
 ## getStatement
+Get statement is a paged API, with 3 parameters: `count`, `startTime`, `endTime`. They have genuine defaults in case not provided. Response contains a pointer to next page information, if it is present.
 
 #### Request
-``curl -X GET http://localhost:8080/statement/{id}/``
+``curl -X POST http://localhost:8080/statement/{id}/``
+```json
+{
+  "id" : 1,
+  "endTime": 1534954568485,
+  "startTime": 1534954553876,
+  "count":10
+}
+```
 #### Response
 ```json
 {  
    "profile":{  
-      "id":"e63b26ed-8105-4608-8b8b-3e7368add5a5",
+      "id":1,
       "name":{  
          "firstName":"Nihal",
          "lastName":"Srivastava"
       },
-      "email":"nsnihal960@gmail.com",
-      "mobile":"8004968195",
+      "email":"nsnihal960@gmail.comww",
+      "mobile":{  
+         "countryCode":"91",
+         "number":"8004968195",
+         "isVerified":true
+      },
       "currency":"INR"
    },
+   "generationDate":1534955186120,
    "balance":{  
-      "balance":"Rs.0.50",
+      "balance":"Rs.66.00",
       "conversionRate":0.015625
    },
    "transactions":[  
       {  
-         "id":"80a1a226-4d84-490c-8c87-c3768735553b",
+         "id":"e26bd143-2596-4bc5-9028-7373a1d53a90",
          "from":null,
-         "to":"e63b26ed-8105-4608-8b8b-3e7368add5a5",
-         "date":1534939169839,
+         "to":1,
+         "date":1534954562432,
          "amount":"Rs.10.00",
          "conversionRate":0.015625,
          "transactionType":"CREDIT",
-         "totalBalance":0.15625
+         "balance":0.859375
       },
       {  
-         "id":"afbd458a-45c8-4ade-a14c-d761bbdec792",
-         "from":"e63b26ed-8105-4608-8b8b-3e7368add5a5",
-         "to":null,
-         "date":1534939358091,
-         "amount":"Rs.8.50",
+         "id":"cdb2a2dd-c49e-40e6-afc3-68b21f4cb09b",
+         "from":null,
+         "to":1,
+         "date":1534954556835,
+         "amount":"Rs.9.00",
          "conversionRate":0.015625,
-         "transactionType":"DEBIT",
-         "totalBalance":0.0234375
-      },
-      {  
-         "id":"0eca91ef-fc4a-41c0-b186-6df06c366eff",
-         "from":"e63b26ed-8105-4608-8b8b-3e7368add5a5",
-         "to":"2c7723e6-0ef7-4b7e-933e-24b240d2d72a",
-         "date":1534939502636,
-         "amount":"Rs.1.00",
-         "conversionRate":0.015625,
-         "transactionType":"DEBIT",
-         "totalBalance":0.0078125
+         "transactionType":"CREDIT",
+         "balance":0.703125
       }
    ],
-   "generationDate":1534939571230
+   "nextPageEndTime":1534954556835
 }
+
 
 ```
 
 # Transfers/Credit/Debits
 
 All balance transfers(add/deduct/transfer) support any currency type. However, if not provided, it defaults to user's currency choice.
+Here, for simplicity purposes, we are directly using ids to operate on users, but we should rely on token mechanism. Id should not be passed in such APIs(since we are not implementing any authentication mechanism, i have used id for demo purposes)
 ## getBalance
 ``--``
 
@@ -133,9 +152,10 @@ All balance transfers(add/deduct/transfer) support any currency type. However, i
 ``curl -X POST http://localhost:8080/transaction/add/``
 ```json
 {
-  "userId" : "add3f304791-334a-4479-8268-362f79139c9b",
+  "userId" : "add3f304791-334a-4479-8268-362f79139c9b", // rely on token in prod rather ids
   "amount" : 10,
-  "currency" : "INR"
+  "currency" : "INR",
+  "token" : "fweefewfwe" // short circuited, but a must
 }
 ```
 #### Response
@@ -162,7 +182,8 @@ All balance transfers(add/deduct/transfer) support any currency type. However, i
   "fromUserId" : "e63b26ed-8105-4608-8b8b-3e7368add5a5",
   "toUserId" : "rewfewfwefwe-334a-4479-8268-362f79139c9b",
   "amount" : 10,
-  "currency" : "INR"
+  "currency" : "INR",
+  "token" : "fweefewfwe" // short circuited, but a must
 }
 ```
 #### Response

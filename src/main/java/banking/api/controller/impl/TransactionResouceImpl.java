@@ -23,7 +23,8 @@ public class TransactionResouceImpl implements TransactionResource {
 
     @Override
     public Response addBalance(AddBalanceRequest addBalanceRequest) {
-        Balance balance =  transactionConsumer.addBalance(
+        addBalanceRequest.validate();
+        Balance balance = transactionConsumer.addBalance(
                 addBalanceRequest.userId,
                 addBalanceRequest.amount,
                 addBalanceRequest.currency
@@ -35,6 +36,7 @@ public class TransactionResouceImpl implements TransactionResource {
 
     @Override
     public Response deductBalance(DeductBalanceRequest deductBalanceRequest) {
+        deductBalanceRequest.validate();
         Balance balance = transactionConsumer.deductBalance(
                 deductBalanceRequest.userId,
                 deductBalanceRequest.amount,
@@ -47,6 +49,7 @@ public class TransactionResouceImpl implements TransactionResource {
 
     @Override
     public Response transferBalance(TransferBalanceRequest transferBalanceRequest) {
+        transferBalanceRequest.validate();
         Balance balance = transactionConsumer.transferMoney(
                 transferBalanceRequest.fromUserId,
                 transferBalanceRequest.toUserId,

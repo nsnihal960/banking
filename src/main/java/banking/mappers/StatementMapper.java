@@ -1,8 +1,8 @@
 package banking.mappers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import banking.api.dto.response.Balance;
 import banking.api.dto.response.Profile;
@@ -12,9 +12,13 @@ import banking.dao.dataobject.TransactionDO;
 
 public class StatementMapper {
     public static Statement toStatementDto(Profile profile, Balance balance, List<TransactionDO> transactionList) {
-        List<Transaction> transactionsDto = transactionList.stream()
-                .map(TransactionMapper::transactionDoToDto)
-                .collect(Collectors.toList());
-        return new Statement(profile, new Date(), balance, transactionsDto);
+        List<Transaction> transactionsDto = new ArrayList<>();
+        Long minTime = Long.MAX_VALUE;
+        for (TransactionDO txn : transactionList) {
+            transactionsDto.add(TransactionMapper.transactionDoToDto(txn));
+            minTime = Math.min(minTime, txn.getTime());
+        }
+        minTime = minTime == Long.MAX_VALUE ? null : minTime;
+        return new Statement(profile, new Date(), balance, transactionsDto, minTime);
     }
 }

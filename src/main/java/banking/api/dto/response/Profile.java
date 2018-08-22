@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Profile extends PublicProfile {
-    public final String id;
+    public final Long id;
 
     @JsonCreator
-    public Profile(@JsonProperty("id") String id,
+    public Profile(@JsonProperty("id") Long id,
                    @JsonProperty("profile") PublicProfile profile) {
         super(profile.name,
                 profile.email,

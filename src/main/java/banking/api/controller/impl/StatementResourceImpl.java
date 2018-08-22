@@ -6,6 +6,7 @@ import com.google.inject.Singleton;
 import javax.ws.rs.core.Response;
 
 import banking.api.controller.StatementResource;
+import banking.api.dto.request.GetStatementRequest;
 import banking.consumer.StatementConsumer;
 
 @Singleton
@@ -18,9 +19,15 @@ public class StatementResourceImpl implements StatementResource {
     }
 
     @Override
-    public Response getStatement(String id) {
+    public Response getStatement(GetStatementRequest request) {
+        request.validate();
         return Response.status(200)
-                .entity(statementConsumer.getStatement(id))
+                .entity(statementConsumer.getStatement(
+                        request.id,
+                        request.startTime,
+                        request.endTime,
+                        request.count
+                ))
                 .build();
     }
 }

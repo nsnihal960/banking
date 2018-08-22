@@ -1,17 +1,18 @@
 package banking.dao.dataobject;
 
+import banking.api.dto.response.Mobile;
 import banking.api.dto.response.Name;
 
 public class ProfileDO {
-    private String id;
+    private Long id;
     private Name name;
     private String email;
-    private String mobile;
+    private Mobile mobile;
     private String currency;
     private Long createdOn;
     private Long updatedOn;
 
-    public ProfileDO(String id, Name name, String email, String mobile, String currency) {
+    public ProfileDO(Long id, Name name, String email, Mobile mobile, String currency) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -25,18 +26,18 @@ public class ProfileDO {
                 "id=" + id +
                 ", name=" + name +
                 ", email='" + email + '\'' +
-                ", mobile='" + mobile + '\'' +
+                ", mobile='" + mobile.toString() + '\'' +
                 ", currency=" + currency +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
                 '}';
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -56,11 +57,11 @@ public class ProfileDO {
         this.email = email;
     }
 
-    public String getMobile() {
+    public Mobile getMobile() {
         return mobile;
     }
 
-    public void setMobile(String mobile) {
+    public void setMobile(Mobile mobile) {
         this.mobile = mobile;
     }
 

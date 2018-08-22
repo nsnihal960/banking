@@ -5,7 +5,6 @@ import com.google.inject.Singleton;
 
 import banking.api.dto.response.Balance;
 import banking.api.dto.response.Profile;
-import banking.api.dto.response.exception.NotFound;
 import banking.biz.CurrenyConversionUtils;
 import banking.dao.TransactionDao;
 import banking.dao.dataobject.TransactionDO;
@@ -27,13 +26,13 @@ public class TransactionConsumer {
         this.profileConsumer = profileConsumer;
     }
 
-    public Balance getBalance(String userId) {
+    public Balance getBalance(Long userId) {
         Profile profile = profileConsumer.getUserById(userId);
         return BalanceMapper.balanceDoToDto(transactionDao.getOrCreateBalance(profile),
                 profile.currency);
     }
 
-    public Balance addBalance(String userId, Double amount, String currency) {
+    public Balance addBalance(Long userId, Double amount, String currency) {
         Profile profile = profileConsumer.getUserById(userId);
         currency = CurrenyConversionUtils.getFallBackCurrency(currency, profile);
         statementConsumer.addTransaction(
@@ -43,7 +42,7 @@ public class TransactionConsumer {
         return getBalance(userId);
     }
 
-    public Balance deductBalance(String userId, Double amount, String currency) {
+    public Balance deductBalance(Long userId, Double amount, String currency) {
         Profile profile = profileConsumer.getUserById(userId);
         currency = CurrenyConversionUtils.getFallBackCurrency(currency, profile);
         statementConsumer.addTransaction(
@@ -53,7 +52,7 @@ public class TransactionConsumer {
         return getBalance(userId);
     }
 
-    public Balance transferMoney(String fromUserId, String toUserId, Double amount, String currency) {
+    public Balance transferMoney(Long fromUserId, Long toUserId, Double amount, String currency) {
         Profile fromUser = profileConsumer.getUserById(fromUserId);
         Profile toUser = profileConsumer.getUserById(toUserId);
         currency = CurrenyConversionUtils.getFallBackCurrency(currency, fromUser);

@@ -21,9 +21,9 @@ import static banking.biz.Constants.GLOBAL_CURRENCY;
 @Singleton
 public class TransactionDao {
     //short circuiting database here
-    private Map<String, BalanceDO> balanceMap = new ConcurrentHashMap<>(1000);
+    private Map<Long, BalanceDO> balanceMap = new ConcurrentHashMap<>(1000);
     //used to simulate row level locks in db like MySQl
-    private Map<String, Object> lockMap = new ConcurrentHashMap<>(1000);
+    private Map<Long, Object> lockMap = new ConcurrentHashMap<>(1000);
 
     public BalanceDO getOrCreateBalance(Profile profile){
         BalanceDO balanceDO = balanceMap.get(profile.id);
@@ -105,8 +105,8 @@ public class TransactionDao {
 
         if(!fromUser.equals(toUser)) {//else deadlock
             //lock both user balance, deadlock free manner
-            String min = fromUser.id.compareTo(toUser.id) > 0 ? fromUser.id : toUser.id;
-            String max = fromUser.id.compareTo(toUser.id) < 0 ? fromUser.id : toUser.id;
+            Long min = fromUser.id.compareTo(toUser.id) > 0 ? fromUser.id : toUser.id;
+            Long max = fromUser.id.compareTo(toUser.id) < 0 ? fromUser.id : toUser.id;
             synchronized (lockMap.get(min)) {
                 synchronized (lockMap.get(max)) {
                     if (fromBalanceDO.getAmount() < updateAmount) {

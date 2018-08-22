@@ -4,8 +4,8 @@ import banking.api.dto.response.Transaction.TransactionType;
 
 public class TransactionDO {
     private String id;
-    private String from;
-    private String to;
+    private Long from;
+    private Long to;
     private Long time;
     private Double amount;
     private String currency;
@@ -13,7 +13,7 @@ public class TransactionDO {
     private TransactionType transactionType;
     private Double totalBalance;
 
-    public TransactionDO(String id, String from, String to, Long time, Double amount, String currency, Double conversionRate, TransactionType transactionType, Double totalBalance) {
+    public TransactionDO(String id, Long from, Long to, Long time, Double amount, String currency, Double conversionRate, TransactionType transactionType, Double totalBalance) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -48,19 +48,19 @@ public class TransactionDO {
         this.id = id;
     }
 
-    public String getFrom() {
+    public Long getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(Long from) {
         this.from = from;
     }
 
-    public String getTo() {
+    public Long getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(Long to) {
         this.to = to;
     }
 

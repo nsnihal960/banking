@@ -28,7 +28,7 @@ public class BankingApplication extends Application<BankingConfiguration> {
     @Inject
     public BankingApplication(ProfileResourceImpl profileResourceImpl,
                               StatementResourceImpl statementResourceImpl,
-                              TransactionResouceImpl transactionResouceImpl){
+                              TransactionResouceImpl transactionResouceImpl) {
         this.profileResource = profileResourceImpl;
         this.statementResource = statementResourceImpl;
         this.transactionResource = transactionResouceImpl;
