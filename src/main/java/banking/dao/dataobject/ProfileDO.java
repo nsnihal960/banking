@@ -1,19 +1,17 @@
 package banking.dao.dataobject;
 
-import java.util.Currency;
+import banking.api.dto.response.Name;
 
-import banking.api.dto.Name;
-
-public class Profile {
-    private Long id;
+public class ProfileDO {
+    private String id;
     private Name name;
     private String email;
     private String mobile;
-    private Currency currency;
+    private String currency;
     private Long createdOn;
     private Long updatedOn;
 
-    public Profile(Long id, Name name, String email, String mobile, Currency currency) {
+    public ProfileDO(String id, Name name, String email, String mobile, String currency) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -34,11 +32,11 @@ public class Profile {
                 '}';
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -66,11 +64,11 @@ public class Profile {
         this.mobile = mobile;
     }
 
-    public Currency getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 

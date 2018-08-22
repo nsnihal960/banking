@@ -1,16 +1,12 @@
 package banking.dao.dataobject;
 
-import java.util.Currency;
-
-public class Balance {
+public class BalanceDO {
     private Double amount;
-    private Currency currency;
     private Long createdOn;
     private Long updatedOn;
 
-    public Balance(Double amount, Currency currency, Long createdOn, Long updatedOn) {
+    public BalanceDO(Double amount, Long createdOn, Long updatedOn) {
         this.amount = amount;
-        this.currency = currency;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
     }
@@ -21,14 +17,6 @@ public class Balance {
 
     public void setAmount(Double amount) {
         this.amount = amount;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
     }
 
     public Long getCreatedOn() {
@@ -51,7 +39,6 @@ public class Balance {
     public String toString() {
         return "Balance{" +
                 "amount=" + amount +
-                ", currency=" + currency +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
                 '}';

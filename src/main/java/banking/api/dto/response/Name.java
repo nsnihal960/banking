@@ -1,10 +1,15 @@
-package banking.api.dto;
+package banking.api.dto.response;
 
-public class Name {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Name implements Response {
     public final String firstName;
     public final String lastName;
 
-    public Name(String firstName, String lastName) {
+    @JsonCreator
+    public Name(@JsonProperty("firstName") String firstName,
+                @JsonProperty("lastName") String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
