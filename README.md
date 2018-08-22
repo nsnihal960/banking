@@ -22,7 +22,7 @@ APIs
 
 #### Request
 ``
-curl -X POST http://localhost:3000/profile/create
+curl -X POST http://localhost:8080/profile/create
 ``
 ```json
 {
@@ -55,18 +55,18 @@ curl -X POST http://localhost:3000/profile/create
 
 ## getProfile
 
-``curl -X GET http://localhost:3000/profile/id/{id}/``
+``curl -X GET http://localhost:8080/profile/id/{id}/``
 
-``curl -X GET http://localhost:3000/profile/mobile/{mobile}/``
+``curl -X GET http://localhost:8080/profile/mobile/{mobile}/``
 
-``curl -X GET http://localhost:3000/profile/email/{email}/``
+``curl -X GET http://localhost:8080/profile/email/{email}/``
 
 # Statement
 
 ## getStatement
 
 #### Request
-``curl -X GET http://localhost:3000/statement/{id}/``
+``curl -X GET http://localhost:8080/statement/{id}/``
 #### Response
 ```json
 {  
@@ -116,21 +116,21 @@ curl -X POST http://localhost:3000/profile/create
          "totalBalance":0.0078125
       }
    ],
-   "generationData":1534939571230
+   "generationDate":1534939571230
 }
 
 ```
 
-#Transfers/Credit/Debits
+# Transfers/Credit/Debits
 
 All balance transfers(add/deduct/transfer) support any currency type. However, if not provided, it defaults to user's currency choice.
-##getBalance
+## getBalance
 ``--``
 
-##addBalance
+## addBalance
 
-####Request
-``curl -X POST http://localhost:3000/transaction/add/``
+#### Request
+``curl -X POST http://localhost:8080/transaction/add/``
 ```json
 {
   "userId" : "add3f304791-334a-4479-8268-362f79139c9b",
@@ -138,7 +138,7 @@ All balance transfers(add/deduct/transfer) support any currency type. However, i
   "currency" : "INR"
 }
 ```
-####Response
+#### Response
 ```json
 {
     "balance": "Rs.10.00",
@@ -147,16 +147,16 @@ All balance transfers(add/deduct/transfer) support any currency type. However, i
 ```
 
 
-##deductBalance
+## deductBalance
 
 ####Request
-``curl -X POST http://localhost:3000/transaction/deduct/``
+``curl -X POST http://localhost:8080/transaction/deduct/``
 
 
-##TransferBalance
+## transferBalance
 
-####Request
-``curl -X POST http://localhost:3000/transaction/transfer/``
+#### Request
+``curl -X POST http://localhost:8080/transaction/transfer/``
 ```json
 {
   "fromUserId" : "e63b26ed-8105-4608-8b8b-3e7368add5a5",
@@ -165,7 +165,7 @@ All balance transfers(add/deduct/transfer) support any currency type. However, i
   "currency" : "INR"
 }
 ```
-####Response
+#### Response
 ```json
 {
     "balance": "Rs.1.00",

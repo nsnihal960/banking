@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Statement implements Response{
     public final Profile profile;
-    public final Date generationData;
+    public final Date generationDate;
     public final Balance balance;
     public final List<Transaction> transactions;
 
@@ -18,7 +18,7 @@ public class Statement implements Response{
                      @JsonProperty("balance") Balance balance,
                      @JsonProperty("transactions") List<Transaction> transactions) {
         this.profile = profile;
-        this.generationData = generationDate;
+        this.generationDate = generationDate;
         this.balance = balance;
         this.transactions = transactions;
     }
@@ -27,7 +27,7 @@ public class Statement implements Response{
     public String toString() {
         return "Statement{" +
                 "profile=" + profile +
-                ", generationData=" + generationData +
+                ", generationDate=" + generationDate +
                 ", balance=" + balance +
                 ", transactions=" + transactions +
                 '}';
