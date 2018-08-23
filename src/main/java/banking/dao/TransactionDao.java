@@ -9,14 +9,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import banking.api.dto.response.Profile;
 import banking.api.dto.response.exception.NotFound;
 import banking.api.dto.response.exception.OperationNotAllowed;
-import banking.biz.CurrenyConversionUtils;
+import banking.common.CurrenyConversionUtils;
 import banking.dao.dataobject.BalanceDO;
 import banking.dao.dataobject.TransactionDO;
 import javafx.util.Pair;
 
 import static banking.api.dto.response.Transaction.TransactionType.CREDIT;
 import static banking.api.dto.response.Transaction.TransactionType.DEBIT;
-import static banking.biz.Constants.GLOBAL_CURRENCY;
+import static banking.common.Constants.GLOBAL_CURRENCY;
 
 @Singleton
 public class TransactionDao {

@@ -1,10 +1,10 @@
 package banking.mappers;
 
 import banking.api.dto.response.Balance;
-import banking.biz.CurrenyConversionUtils;
+import banking.common.CurrenyConversionUtils;
 import banking.dao.dataobject.BalanceDO;
 
-import static banking.biz.Constants.GLOBAL_CURRENCY;
+import static banking.common.Constants.GLOBAL_CURRENCY;
 
 public class BalanceMapper {
     public static Balance balanceDoToDto(BalanceDO balanceDO, String localCurrency) {

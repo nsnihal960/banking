@@ -11,7 +11,7 @@ import banking.api.dto.response.Profile;
 import banking.api.dto.response.PublicProfile;
 import banking.api.dto.response.exception.NotFound;
 import banking.api.dto.response.exception.OperationNotAllowed;
-import banking.biz.CurrenyConversionUtils;
+import banking.common.CurrenyConversionUtils;
 import banking.dao.ProfileDao;
 import banking.dao.dataobject.ProfileDO;
 import banking.mappers.ProfileMapper;

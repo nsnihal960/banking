@@ -1,16 +1,17 @@
 package banking;
 
-import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.*;
-import javax.validation.constraints.*;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+import io.dropwizard.Configuration;
 
 public class BankingConfiguration extends Configuration {
     @NotEmpty
-    private String template="template";
+    private String template="Banking Apllication Demo";
 
     @NotEmpty
-    private String defaultName = "Stranger";
+    private String defaultName = "Banking";
 
     @JsonProperty
     public String getTemplate() {

@@ -67,7 +67,7 @@ IsVerified is short circuited, but should be used to allow any transaction from/
 
 ``curl -X GET http://localhost:8080/profile/id/{id}/``
 
-``curl -X POST http://localhost:8080/profile/mobile/{mobile}/``
+``curl -X POST http://localhost:8080/profile/mobile/``
 ```json
 {
     "countryCode":"91",
@@ -169,7 +169,7 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 
 ## deductBalance
 
-####Request
+#### Request
 ``curl -X POST http://localhost:8080/transaction/deduct/``
 
 

@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 
 import banking.api.dto.response.Balance;
 import banking.api.dto.response.Profile;
-import banking.biz.CurrenyConversionUtils;
+import banking.common.CurrenyConversionUtils;
 import banking.dao.TransactionDao;
 import banking.dao.dataobject.TransactionDO;
 import banking.mappers.BalanceMapper;

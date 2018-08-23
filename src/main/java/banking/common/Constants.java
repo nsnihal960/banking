@@ -1,7 +1,4 @@
-package banking.biz;
-
-import java.util.Currency;
-import java.util.Locale;
+package banking.common;
 
 public class Constants {
     public static final String GLOBAL_CURRENCY = "USD";

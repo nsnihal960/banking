@@ -14,7 +14,6 @@ import banking.api.controller.TransactionResource;
 import banking.api.controller.impl.ProfileResourceImpl;
 import banking.api.controller.impl.StatementResourceImpl;
 import banking.api.controller.impl.TransactionResouceImpl;
-import banking.consumer.BankingResourceImpl;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -53,7 +52,6 @@ public class BankingApplication extends Application<BankingConfiguration> {
     @Override
     public void run(final BankingConfiguration configuration,
                     final Environment environment) {
-        environment.jersey().register(new BankingResourceImpl());
         environment.jersey().register(profileResource);
         environment.jersey().register(statementResource);
         environment.jersey().register(transactionResource);

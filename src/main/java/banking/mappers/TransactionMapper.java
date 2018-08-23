@@ -3,7 +3,7 @@ package banking.mappers;
 import java.util.Date;
 
 import banking.api.dto.response.Transaction;
-import banking.biz.CurrenyConversionUtils;
+import banking.common.CurrenyConversionUtils;
 import banking.dao.dataobject.TransactionDO;
 
 public class TransactionMapper {

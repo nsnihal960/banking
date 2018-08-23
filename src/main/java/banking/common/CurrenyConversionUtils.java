@@ -1,4 +1,4 @@
-package banking.biz;
+package banking.common;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
