@@ -46,7 +46,7 @@ curl -X POST http://localhost:8080/profile/create
 IsVerified is short circuited, but should be used to allow any transaction from/to this profile.
 ```json
 {
-    "id": "e63b26ed-8105-4608-8b8b-3e7368add5a5",
+    "id": 1,
     "name": {
         "firstName": "Nihal",
         "lastName": "Srivastava"
@@ -80,7 +80,7 @@ IsVerified is short circuited, but should be used to allow any transaction from/
 Get statement is a paged API, with 3 parameters: `count`, `startTime`, `endTime`. They have genuine defaults in case not provided. Response contains a pointer to next page information, if it is present.
 
 #### Request
-``curl -X POST http://localhost:8080/statement/{id}/``
+``curl -X POST http://localhost:8080/statement/``
 ```json
 {
   "id" : 1,

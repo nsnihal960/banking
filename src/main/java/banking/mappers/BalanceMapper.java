@@ -8,8 +8,9 @@ import static banking.common.Constants.GLOBAL_CURRENCY;
 
 public class BalanceMapper {
     public static Balance balanceDoToDto(BalanceDO balanceDO, String localCurrency) {
-        return new Balance(
-                CurrenyConversionUtils.getLocalCurrency(balanceDO.getAmount(), localCurrency),
-                CurrenyConversionUtils.conversionRate(localCurrency, GLOBAL_CURRENCY));
+        return new Balance(balanceDO.getAmount(),
+                    CurrenyConversionUtils.conversionRate(localCurrency, GLOBAL_CURRENCY),
+                    localCurrency
+                );
     }
 }
