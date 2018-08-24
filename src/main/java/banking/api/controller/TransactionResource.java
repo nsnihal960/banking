@@ -12,23 +12,19 @@ import banking.api.dto.request.DeductBalanceRequest;
 import banking.api.dto.request.TransferBalanceRequest;
 
 @Path("/transaction")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public interface TransactionResource {
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/add")
     Response addBalance(AddBalanceRequest addBalanceRequest);
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/deduct")
     Response deductBalance(DeductBalanceRequest addBalanceRequest);
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/transfer")
     Response transferBalance(TransferBalanceRequest addBalanceRequest);
 }

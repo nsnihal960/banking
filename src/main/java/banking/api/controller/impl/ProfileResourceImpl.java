@@ -29,7 +29,9 @@ public class ProfileResourceImpl implements ProfileResource {
     }
 
     @Override
-    public Response getProfileByMobile(Mobile mobile) {
+    public Response getProfileByMobile(String countryCode, String number) {
+        Mobile mobile = new Mobile(countryCode, number);
+        mobile.validate();
         return Response.status(200)
                 .entity(profileConsumer.getUserByMobile(mobile))
                 .build();

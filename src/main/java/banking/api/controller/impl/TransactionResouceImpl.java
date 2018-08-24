@@ -1,5 +1,6 @@
 package banking.api.controller.impl;
 
+import banking.consumer.AccountConsumer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -10,21 +11,20 @@ import banking.api.dto.request.AddBalanceRequest;
 import banking.api.dto.request.DeductBalanceRequest;
 import banking.api.dto.request.TransferBalanceRequest;
 import banking.api.dto.response.Balance;
-import banking.consumer.TransactionConsumer;
 
 @Singleton
 public class TransactionResouceImpl implements TransactionResource {
-    private final TransactionConsumer transactionConsumer;
+    private final AccountConsumer accountConsumer;
 
     @Inject
-    public TransactionResouceImpl(TransactionConsumer transactionConsumer) {
-        this.transactionConsumer = transactionConsumer;
+    public TransactionResouceImpl(AccountConsumer accountConsumer) {
+        this.accountConsumer = accountConsumer;
     }
 
     @Override
     public Response addBalance(AddBalanceRequest addBalanceRequest) {
         addBalanceRequest.validate();
-        Balance balance = transactionConsumer.addBalance(
+        Balance balance = accountConsumer.addBalance(
                 addBalanceRequest.userId,
                 addBalanceRequest.amount,
                 addBalanceRequest.currency
@@ -37,7 +37,7 @@ public class TransactionResouceImpl implements TransactionResource {
     @Override
     public Response deductBalance(DeductBalanceRequest deductBalanceRequest) {
         deductBalanceRequest.validate();
-        Balance balance = transactionConsumer.deductBalance(
+        Balance balance = accountConsumer.deductBalance(
                 deductBalanceRequest.userId,
                 deductBalanceRequest.amount,
                 deductBalanceRequest.currency
@@ -50,7 +50,7 @@ public class TransactionResouceImpl implements TransactionResource {
     @Override
     public Response transferBalance(TransferBalanceRequest transferBalanceRequest) {
         transferBalanceRequest.validate();
-        Balance balance = transactionConsumer.transferMoney(
+        Balance balance = accountConsumer.transferMoney(
                 transferBalanceRequest.fromUserId,
                 transferBalanceRequest.toUserId,
                 transferBalanceRequest.amount,

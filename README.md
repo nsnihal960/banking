@@ -9,7 +9,9 @@ How to start the banking application
 
 # Currency supported
 
-For brevity, I have only implemented few currencies which are listed as follows:
+All time is stored in epoch and thus can be used by clients to represent in their own format.
+Currency of bank is maintained in single currency(USD here), but APIs support input in any currency. Clients always get conversion rate with user preferred currency for display purposes.
+Since transaction currencies can be different from sender/receiver, transaction amount is displayed with transaction currency type. For brevity, I have only implemented few currencies which are listed as follows:
 
 ``USD, INR, GBP, JPY, AUD``
 
@@ -66,28 +68,19 @@ IsVerified is short circuited, but should be used to allow any transaction from/
 
 ``curl -X GET http://localhost:8080/profile/id/{id}/``
 
-``curl -X POST http://localhost:8080/profile/mobile/``
+``curl -X GET http://localhost:8080/profile/mobile?code={code}&number={number}``
 ```json
-{
-    "countryCode":"91",
-    "number":"8004968195"
-}
 ```
-# Statement
+# Account
+## getBalance
+``curl -X GET http://localhost:8080/account/balance/{id}``
 
 ## getStatement
-Get statement is a paged API, with 3 parameters: `count`, `startTime`, `endTime`. They have genuine defaults in case not provided. Response contains a pointer to next page information, if it is present.
+Get statement is a paged API, with 3 parameters: `count`, `startTime`, `endTime`. They have genuine defaults in case not provided. Response contains a pointer to next page information, clients can stop requesting if either no item received or page size is less than requested. The range is inclusive, exclusive in nature.
 
 #### Request
-``curl -X POST http://localhost:8080/statement/``
-```json
-{
-  "id" : 1,
-  "endTime": 1534954568485,
-  "startTime": 1534954553876,
-  "count":10
-}
-```
+``curl -X POST http://localhost:8080/account/statement?id={}&count={}&endTime=1535108770916&startTime=1535108770915``
+
 #### Response
 ```json
 {  
@@ -142,8 +135,6 @@ Get statement is a paged API, with 3 parameters: `count`, `startTime`, `endTime`
 
 All balance transfers(add/deduct/transfer) support any currency type. However, if not provided, it defaults to user's currency choice.
 Here, for simplicity purposes, we are directly using ids to operate on users, but we should rely on token mechanism. Id should not be passed in such APIs(since we are not implementing any authentication mechanism, i have used id for demo purposes)
-## getBalance
-``--``
 
 ## addBalance
 
@@ -174,23 +165,24 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 
 
 ## transferBalance
-
+This is expected to happen from sender's account. So, his balance is returned after successful transaction.
 #### Request
 ``curl -X POST http://localhost:8080/transaction/transfer/``
 ```json
 {
-  "fromUserId" : 1,
-  "toUserId" : 2,
-  "amount" : 10,
-  "currency" : "INR",
-  "token" : "fweefewfwe" // short circuited, but a must
+    "fromUserId" : 1,
+    "toUserId" : 2,
+    "amount" : 10,
+    "currency" : "INR",
+    "token" : "fweefewfwe" // short circuited, but a must
 }
 ```
 #### Response
 ```json
 {
-    "balance": "Rs.1.00",
-    "conversionRate": 0.015625
+    "balance": 9.375,
+    "conversionRate": 0.015625,
+    "userCurrency": "INR"
 }
 ```
 

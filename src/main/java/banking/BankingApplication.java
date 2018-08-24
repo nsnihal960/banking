@@ -9,10 +9,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 import banking.api.controller.ProfileResource;
-import banking.api.controller.StatementResource;
+import banking.api.controller.AccountResource;
 import banking.api.controller.TransactionResource;
 import banking.api.controller.impl.ProfileResourceImpl;
-import banking.api.controller.impl.StatementResourceImpl;
+import banking.api.controller.impl.AccountResourceImpl;
 import banking.api.controller.impl.TransactionResouceImpl;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -21,15 +21,15 @@ import io.dropwizard.setup.Environment;
 @Singleton
 public class BankingApplication extends Application<BankingConfiguration> {
     private final ProfileResource profileResource;
-    private final StatementResource statementResource;
+    private final AccountResource accountResource;
     private final TransactionResource transactionResource;
 
     @Inject
     public BankingApplication(ProfileResourceImpl profileResourceImpl,
-                              StatementResourceImpl statementResourceImpl,
+                              AccountResourceImpl statementResourceImpl,
                               TransactionResouceImpl transactionResouceImpl) {
         this.profileResource = profileResourceImpl;
-        this.statementResource = statementResourceImpl;
+        this.accountResource = statementResourceImpl;
         this.transactionResource = transactionResouceImpl;
     }
 
@@ -53,7 +53,7 @@ public class BankingApplication extends Application<BankingConfiguration> {
     public void run(final BankingConfiguration configuration,
                     final Environment environment) {
         environment.jersey().register(profileResource);
-        environment.jersey().register(statementResource);
+        environment.jersey().register(accountResource);
         environment.jersey().register(transactionResource);
     }
 

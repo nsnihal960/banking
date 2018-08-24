@@ -1,11 +1,7 @@
 package banking.api.controller;
 
 import javax.validation.Valid;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -20,9 +16,11 @@ public interface ProfileResource {
     @Path("/id/{id}")
     Response getProfileById(@PathParam("id") Long id);
 
-    @POST
+    @GET
     @Path("/mobile")
-    Response getProfileByMobile(@Valid Mobile mobile);
+    Response getProfileByMobile(
+            @QueryParam("code") String code,
+            @QueryParam("number") String number);
 
     @POST
     @Path("/create")

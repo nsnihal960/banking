@@ -1,16 +1,18 @@
 package banking.dao;
 
+import banking.api.dto.response.exception.NotFound;
+import banking.api.dto.response.exception.OperationNotAllowed;
+import banking.common.CurrenyConversionUtils;
+import banking.dao.dataobject.BalanceDO;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import banking.api.dto.response.Profile;
-import banking.api.dto.response.exception.NotFound;
-import banking.api.dto.response.exception.OperationNotAllowed;
-import banking.common.CurrenyConversionUtils;
-import banking.dao.dataobject.BalanceDO;
 import banking.dao.dataobject.TransactionDO;
 import javafx.util.Pair;
 
@@ -19,11 +21,36 @@ import static banking.api.dto.response.Transaction.TransactionType.DEBIT;
 import static banking.common.Constants.GLOBAL_CURRENCY;
 
 @Singleton
-public class TransactionDao {
+public class AccountDao {
     //short circuiting database here
+    private Map<Long, List<TransactionDO>> statementMap = new ConcurrentHashMap<>(1000);
     private Map<Long, BalanceDO> balanceMap = new ConcurrentHashMap<>(1000);
     //used to simulate row level locks in db like MySQl
     private Map<Long, Object> lockMap = new ConcurrentHashMap<>(1000);
+
+    public void addTransaction(Profile user, TransactionDO transaction) {
+        getTransaction(user).add(transaction);
+        //can be made thread safe, overkill for now as its unique for users
+        getTransaction(user).sort((t1, t2) -> t2.getTime().compareTo(t1.getTime()));
+    }
+
+    public List<TransactionDO> getTrimmedTransactions(Profile user,
+                                                      Long start,
+                                                      Long end,
+                                                      int pageCount) {
+        return getSubList(getTransaction(user),
+                start,
+                end,
+                pageCount);
+    }
+
+    public List<TransactionDO> getTransaction(Profile user) {
+        if (!statementMap.containsKey(user.id)) {
+            statementMap.put(user.id, new ArrayList<>());
+        }
+        List<TransactionDO> transactions = statementMap.get(user.id);
+        return transactions;
+    }
 
     public BalanceDO getOrCreateBalance(Profile profile){
         BalanceDO balanceDO = balanceMap.get(profile.id);
@@ -125,24 +152,41 @@ public class TransactionDao {
             toTotalAmount = fromTotalAmount;
         }
         return new Pair<>(
-                        new TransactionDO(transactionId,
-                                fromUser.id,
-                                toUser.id,
-                                now,
-                                updateAmount,
-                                currency,
-                                CurrenyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY),
-                                DEBIT,
-                                fromTotalAmount),
-                        new TransactionDO(transactionId,
-                                fromUser.id,
-                                toUser.id,
-                                now,
-                                updateAmount,
-                                currency,
-                                CurrenyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY),
-                                CREDIT,
-                                toTotalAmount
-                                ));
+                new TransactionDO(transactionId,
+                        fromUser.id,
+                        toUser.id,
+                        now,
+                        updateAmount,
+                        currency,
+                        CurrenyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY),
+                        DEBIT,
+                        fromTotalAmount),
+                new TransactionDO(transactionId,
+                        fromUser.id,
+                        toUser.id,
+                        now,
+                        updateAmount,
+                        currency,
+                        CurrenyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY),
+                        CREDIT,
+                        toTotalAmount
+                ));
+    }
+
+    private List<TransactionDO> getSubList(List<TransactionDO> list,
+                                           Long start,
+                                           Long end,
+                                           int pageCount) {
+        List<TransactionDO> transactions = new ArrayList<>(pageCount);
+        int count = 0;
+        for (int i = 0; i < list.size() && count < pageCount; i++) {
+            if (list.get(i).getTime() >= start
+                    && list.get(i).getTime() < end) {
+                transactions.add(list.get(i));
+                count++;
+            }
+        }
+        return transactions;
+
     }
 }
