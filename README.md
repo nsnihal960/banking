@@ -36,7 +36,6 @@ curl -X POST http://localhost:8080/profile/create
       "number":"8004968195"
   },
   "email":"nsnihal960@gmail.com",
-  "mobile":"8004968195",
   "currency":"INR"
 	}
 }
@@ -152,7 +151,7 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 ``curl -X POST http://localhost:8080/transaction/add/``
 ```json
 {
-  "userId" : "add3f304791-334a-4479-8268-362f79139c9b", // rely on token in prod rather ids
+  "userId" : 1, // rely on token in prod rather ids
   "amount" : 10,
   "currency" : "INR",
   "token" : "fweefewfwe" // short circuited, but a must
@@ -161,8 +160,9 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 #### Response
 ```json
 {
-    "balance": "Rs.10.00",
-    "conversionRate": 0.015625
+    "balance": 0.5625,
+    "conversionRate": 0.015625,
+    "userCurrency": "INR"
 }
 ```
 
@@ -179,8 +179,8 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 ``curl -X POST http://localhost:8080/transaction/transfer/``
 ```json
 {
-  "fromUserId" : "e63b26ed-8105-4608-8b8b-3e7368add5a5",
-  "toUserId" : "rewfewfwefwe-334a-4479-8268-362f79139c9b",
+  "fromUserId" : 1,
+  "toUserId" : 2,
   "amount" : 10,
   "currency" : "INR",
   "token" : "fweefewfwe" // short circuited, but a must
