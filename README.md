@@ -4,8 +4,7 @@ How to start the banking application
 ---
 
 1. Run `mvn clean install` to build your application
-1. Start application with `java -jar target/banking-1.0-SNAPSHOT.jar server`
-1. To check that your application is running enter url `http://localhost:8080`
+2. Start application with `java -jar target/banking-1.0-SNAPSHOT.jar server`
 
 # Currency supported
 All time is stored in epoch and thus can be used by clients to represent in their own format.
