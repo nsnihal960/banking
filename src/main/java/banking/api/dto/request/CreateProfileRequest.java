@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +16,7 @@ import banking.api.dto.response.exception.ClientException;
 
 public class CreateProfileRequest implements Request {
     public final PublicProfile profile;
+    private static final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$");
 
     @JsonCreator
     public CreateProfileRequest(@NotNull @JsonProperty("profile") PublicProfile profile) {
@@ -36,6 +38,10 @@ public class CreateProfileRequest implements Request {
         }
         if (StringUtils.isBlank(profile.email)) {
             errors.add("User email cannot be blank");
+        } else {
+            if(!VALID_EMAIL_REGEX.matcher(profile.email).matches()){
+                errors.add("User email format not accepted");
+            }
         }
         if (StringUtils.isBlank(profile.currency)) {
             errors.add("User currency cannot be blank");

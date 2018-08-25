@@ -6,7 +6,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import banking.api.dto.request.CreateProfileRequest;
-import banking.api.dto.response.Mobile;
 
 @Path("/profile")
 @Produces(MediaType.APPLICATION_JSON)

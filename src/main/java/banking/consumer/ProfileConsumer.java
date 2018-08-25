@@ -11,7 +11,7 @@ import banking.api.dto.response.Profile;
 import banking.api.dto.response.PublicProfile;
 import banking.api.dto.response.exception.NotFound;
 import banking.api.dto.response.exception.OperationNotAllowed;
-import banking.common.CurrenyConversionUtils;
+import banking.common.CurrencyConversionUtils;
 import banking.dao.ProfileDao;
 import banking.dao.dataobject.ProfileDO;
 import banking.mappers.ProfileMapper;
@@ -27,35 +27,44 @@ public class ProfileConsumer {
     }
 
     public Profile createUser(PublicProfile publicProfile){
+        logger.info("Received request to create user for: {}", publicProfile);
         if(profileDao.getUserByEmail(publicProfile.email) != null){
             throw new OperationNotAllowed("User already exists with email!");
         }
         if(profileDao.getUserByMobile(publicProfile.mobile) != null){
             throw new OperationNotAllowed("User already exists with mobile!");
         }
-        CurrenyConversionUtils.validateCurrency(publicProfile.currency);
+        CurrencyConversionUtils.validateCurrency(publicProfile.currency);
         ProfileDO privateProfile = profileDao.createUser(publicProfile);
-        return ProfileMapper.profileDoToDto(privateProfile);
+        Profile profile = ProfileMapper.profileDoToDto(privateProfile);
+        logger.info("Completed request to create user for: {}", publicProfile);
+        return profile;
     }
 
     public Profile getUserById(Long userId){
+        logger.info("Received request to get user for id: {}", userId);
         ProfileDO privateProfile = profileDao.getUserById(userId);
         if(privateProfile == null){
             throw new NotFound("User Id cannot be located! ");
         }
-        return ProfileMapper.profileDoToDto(privateProfile);
+        Profile profile = ProfileMapper.profileDoToDto(privateProfile);
+        logger.info("Completed request to get user for id: {}", userId);
+        return profile;
+    }
+
+    public Profile getUserByMobile(Mobile mobile){
+        logger.info("Received request to get user for mobile: {}", mobile);
+        ProfileDO privateProfile = profileDao.getUserByMobile(mobile);
+        if(privateProfile == null){
+            throw new NotFound("User Id cannot be located! ");
+        }
+        Profile profile = ProfileMapper.profileDoToDto(privateProfile);
+        logger.info("Completed request to get user for mobile: {}", mobile);
+        return profile;
     }
 
     public Profile getUserByEmail(String email){
         ProfileDO privateProfile = profileDao.getUserByEmail(email);
-        if(privateProfile == null){
-            throw new NotFound("User Id cannot be located! ");
-        }
-        return ProfileMapper.profileDoToDto(privateProfile);
-    }
-
-    public Profile getUserByMobile(Mobile mobile){
-        ProfileDO privateProfile = profileDao.getUserByMobile(mobile);
         if(privateProfile == null){
             throw new NotFound("User Id cannot be located! ");
         }

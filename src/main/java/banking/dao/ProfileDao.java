@@ -51,7 +51,7 @@ public class ProfileDao {
     }
 
     private Profile getPrivateProfile(PublicProfile publicProfile) {
-        Long userId = counter.addAndGet(1);
+        Long userId = counter.incrementAndGet();
         return new Profile(userId, publicProfile);
     }
 }

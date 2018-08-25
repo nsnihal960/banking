@@ -14,7 +14,7 @@ public class DeductBalanceRequest implements Request {
     public final Long userId;
     public final Double amount;
     public final String currency;
-    public final String token;
+    public final String token; //not used for now
 
     @JsonCreator
     public DeductBalanceRequest(@JsonProperty("userId") Long userId,

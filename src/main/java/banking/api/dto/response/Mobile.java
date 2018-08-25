@@ -35,7 +35,7 @@ public class Mobile implements Request {
 
         if (!countryCode.equals(mobile.countryCode)) return false;
         if (!number.equals(mobile.number)) return false;
-        return isVerified != null ? isVerified.equals(mobile.isVerified) : mobile.isVerified == null;
+        return isVerified.equals(mobile.isVerified);
     }
 
     @Override
@@ -62,6 +62,15 @@ public class Mobile implements Request {
         }
         if (StringUtils.isBlank(number)) {
             errors.add("User mobile number not valid(Extension number cannot be blank)");
+        }
+        if(!(countryCode.matches("\\d{3}") || countryCode.matches("\\d{2}"))){
+            errors.add("User mobile number not valid(Country Code not valid. Must be 2-3 digit number)");
+        }
+        if(!(number.matches("\\d{10}")
+                || countryCode.matches("\\d{7}")
+                || countryCode.matches("\\d{8}")
+                || countryCode.matches("\\d{9}"))){
+            errors.add("User mobile number not valid(Number not valid. Must be 7-10 digit number)");
         }
         if (errors.size() > 0) {
             throw new ClientException(errors.toString());

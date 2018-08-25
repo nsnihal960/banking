@@ -8,7 +8,7 @@ import java.util.Map;
 import banking.api.dto.response.Profile;
 import banking.api.dto.response.exception.NotSupported;
 
-public class CurrenyConversionUtils {
+public class CurrencyConversionUtils {
     private static Map<String, Double> exchange; //for USD
     private static Map<String, Locale> localeStore;
 
@@ -54,7 +54,7 @@ public class CurrenyConversionUtils {
         if(currency == null){
             currency = user.currency;
         }
-        CurrenyConversionUtils.validateCurrency(currency);
+        CurrencyConversionUtils.validateCurrency(currency);
         return currency;
     }
 

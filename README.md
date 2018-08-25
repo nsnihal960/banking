@@ -8,7 +8,6 @@ How to start the banking application
 1. To check that your application is running enter url `http://localhost:8080`
 
 # Currency supported
-
 All time is stored in epoch and thus can be used by clients to represent in their own format.
 Currency of bank is maintained in single currency(USD here), but APIs support input in any currency. Clients always get conversion rate with user preferred currency for display purposes.
 Since transaction currencies can be different from sender/receiver, transaction amount is displayed with transaction currency type. For brevity, I have only implemented few currencies which are listed as follows:
@@ -23,6 +22,8 @@ APIs
 ## createProfile
 
 #### Request
+
+User can create profiles by providing registration details. Profiles are uniquely identified by mobile and email. So, appropriate validation are made on these fields. UserId generation is incremental from 1(Left here for simplicity in testing/evaluation; Not to be used in production, as it results in predicting user's Ids)
 ``
 curl -X POST http://localhost:8080/profile/create
 ``
@@ -58,7 +59,6 @@ IsVerified is short circuited, but should be used to allow any transaction from/
         "isVerified": true
     },
     "email": "nsnihal960@gmail.com",
-    "mobile": "8004968195",
     "currency": "INR"
 }
 ```
@@ -76,7 +76,7 @@ IsVerified is short circuited, but should be used to allow any transaction from/
 ``curl -X GET http://localhost:8080/account/balance/{id}``
 
 ## getStatement
-Get statement is a paged API, with 3 parameters: `count`, `startTime`, `endTime`. They have genuine defaults in case not provided. Response contains a pointer to next page information, clients can stop requesting if either no item received or page size is less than requested. The range is inclusive, exclusive in nature.
+Get statement is a paged API, with 3 parameters: `count`, `startTime`, `endTime`. They have genuine defaults in case not provided. Response contains a pointer to next page information, clients can stop requesting if either no item received or page size is less than requested. The start-end time range is (inclusive, exclusive] in nature.
 
 #### Request
 ``curl -X POST http://localhost:8080/account/statement?id={}&count={}&endTime=1535108770916&startTime=1535108770915``
@@ -100,7 +100,7 @@ Get statement is a paged API, with 3 parameters: `count`, `startTime`, `endTime`
    },
    "generationDate":1534955186120,
    "balance":{  
-      "balance":"Rs.66.00",
+      "balance":"1.00",
       "conversionRate":0.015625
    },
    "transactions":[  
@@ -144,7 +144,7 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 {
   "userId" : 1, // rely on token in prod rather ids
   "amount" : 10,
-  "currency" : "INR",
+  "currency" : "INR", //can be any currency
   "token" : "fweefewfwe" // short circuited, but a must
 }
 ```
@@ -161,8 +161,24 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 ## deductBalance
 
 #### Request
-``curl -X POST http://localhost:8080/transaction/deduct/``
 
+``curl -X POST http://localhost:8080/transaction/deduct/``
+```json
+{
+  "userId" : 1, // rely on token in prod rather ids
+  "amount" : 1,
+  "currency" : "INR", //can be any currency
+  "token" : "fweefewfwe" // short circuited, but a must
+}
+```
+#### Response
+```json
+{
+    "balance": 0.5125,
+    "conversionRate": 0.015625,
+    "userCurrency": "INR"
+}
+```
 
 ## transferBalance
 This is expected to happen from sender's account. So, his balance is returned after successful transaction.
@@ -173,7 +189,7 @@ This is expected to happen from sender's account. So, his balance is returned af
     "fromUserId" : 1,
     "toUserId" : 2,
     "amount" : 10,
-    "currency" : "INR",
+    "currency" : "INR", //can be any currency
     "token" : "fweefewfwe" // short circuited, but a must
 }
 ```
