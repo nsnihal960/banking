@@ -7,21 +7,21 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/profile")
+@Path("/profiles")
 @Produces(MediaType.APPLICATION_JSON)
 public interface ProfileResource {
 
     @GET
-    @Path("/id/{id}")
+    @Path("/{id}")
     Response getProfileById(@PathParam("id") Long id);
 
     @GET
-    @Path("/mobile")
+    @Path("")
     Response getProfileByMobile(
             @QueryParam("code") String code,
             @QueryParam("number") String number);
 
     @POST
-    @Path("/create")
+    @Path("/")
     Response createProfile(@Valid CreateProfileRequest createProfileRequest);
 }
