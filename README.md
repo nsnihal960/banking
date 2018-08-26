@@ -24,9 +24,9 @@ APIs
 
 User can create profiles by providing registration details. Profiles are uniquely identified by mobile and email. So, appropriate validation are made on these fields. UserId generation is incremental from 1(Left here for simplicity in testing/evaluation; Not to be used in production, as it results in predicting user's Ids)
 ``
-curl -X POST http://localhost:8080/profile/create
+curl -X POST http://localhost:8080/profiles
 ``
-```json
+```javascript
 {
 "profile" : {
   "name" : {
@@ -45,7 +45,7 @@ curl -X POST http://localhost:8080/profile/create
 
 #### Response
 IsVerified is short circuited, but should be used to allow any transaction from/to this profile.
-```json
+```javascript
 {
     "id": 1,
     "name": {
@@ -65,23 +65,23 @@ IsVerified is short circuited, but should be used to allow any transaction from/
 
 ## getProfile
 
-``curl -X GET http://localhost:8080/profile/id/{id}/``
+``curl -X GET http://localhost:8080/profiles/{id}/``
 
-``curl -X GET http://localhost:8080/profile/mobile?code={code}&number={number}``
-```json
+``curl -X GET http://localhost:8080/profiles?code={code}&number={number}``
+```javascript
 ```
 # Account
 ## getBalance
-``curl -X GET http://localhost:8080/account/balance/{id}``
+``curl -X GET http://localhost:8080/accounts/{id}``
 
 ## getStatement
-Get statement is a paged API, with 3 parameters: `count`, `startTime`, `endTime`. They have genuine defaults in case not provided. Response contains a pointer to next page information, clients can stop requesting if either no item received or page size is less than requested. The start-end time range is (inclusive, exclusive] in nature.
+Get statement is a paged API, with 3 parameters: `limit`, `startTime`, `endTime`. They have genuine defaults in case not provided. Response contains a pointer to next page information, clients can stop requesting if either no item received or page size is less than requested. The start-end time range is (inclusive, exclusive] in nature.
 
 #### Request
-``curl -X POST http://localhost:8080/account/statement?id={}&count={}&endTime=1535108770916&startTime=1535108770915``
+``curl -X POST http://localhost:8080/accounts/{id}/limit={}&endTime=1535108770916&startTime=1535108770915``
 
 #### Response
-```json
+```javascript
 {  
    "profile":{  
       "id":1,
@@ -138,8 +138,8 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 ## addBalance
 
 #### Request
-``curl -X POST http://localhost:8080/transaction/add/``
-```json
+``curl -X POST http://localhost:8080/transactions/add/``
+```javascript
 {
   "userId" : 1, // rely on token in prod rather ids
   "amount" : 10,
@@ -148,7 +148,7 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 }
 ```
 #### Response
-```json
+```javascript
 {
     "balance": 0.5625,
     "conversionRate": 0.015625,
@@ -161,8 +161,8 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 
 #### Request
 
-``curl -X POST http://localhost:8080/transaction/deduct/``
-```json
+``curl -X POST http://localhost:8080/transactions/deduct/``
+```javascript
 {
   "userId" : 1, // rely on token in prod rather ids
   "amount" : 1,
@@ -171,7 +171,7 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 }
 ```
 #### Response
-```json
+```javascript
 {
     "balance": 0.5125,
     "conversionRate": 0.015625,
@@ -182,8 +182,8 @@ Here, for simplicity purposes, we are directly using ids to operate on users, bu
 ## transferBalance
 This is expected to happen from sender's account. So, his balance is returned after successful transaction.
 #### Request
-``curl -X POST http://localhost:8080/transaction/transfer/``
-```json
+``curl -X POST http://localhost:8080/transactions/transfer/``
+```javascript
 {
     "fromUserId" : 1,
     "toUserId" : 2,
@@ -193,7 +193,7 @@ This is expected to happen from sender's account. So, his balance is returned af
 }
 ```
 #### Response
-```json
+```javascript
 {
     "balance": 9.375,
     "conversionRate": 0.015625,

@@ -6,8 +6,8 @@ import banking.api.dto.response.Profile;
 import banking.api.dto.response.PublicProfile;
 import banking.consumer.AccountConsumer;
 import banking.consumer.ProfileConsumer;
-import banking.dao.AccountDao;
-import banking.dao.ProfileDao;
+import banking.dao.impl.BalanceDaoImpl;
+import banking.dao.impl.ProfileDaoImpl;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +22,8 @@ public class BankingTest extends TestCase implements TestConstants {
     @Before
     protected void setUp() throws Exception{
         super.setUp();
-        profileConsumer = new ProfileConsumer(new ProfileDao());
-        accountConsumer = new AccountConsumer(new AccountDao(), profileConsumer);
+        profileConsumer = new ProfileConsumer(new ProfileDaoImpl());
+        accountConsumer = new AccountConsumer(new BalanceDaoImpl(), profileConsumer);
     }
 
     @Test

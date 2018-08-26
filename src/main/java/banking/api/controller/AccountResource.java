@@ -5,18 +5,18 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/account")
+@Path("/accounts")
 @Produces(MediaType.APPLICATION_JSON)
 public interface AccountResource {
     @GET
-    @Path("/statement")
+    @Path("/{id}/statement")
     Response getStatement(
-            @QueryParam("id") Long id,
+            @PathParam("id") Long id,
             @QueryParam("startTime") Long startTime,
             @QueryParam("endTime") Long endTime,
-            @QueryParam("count") Integer count);
+            @QueryParam("limit") Integer count);
 
     @GET
-    @Path("/balance/{id}")
+    @Path("/{id}")
     Response getBalance(@NotNull @PathParam("id") Long id);
 }

@@ -6,7 +6,7 @@ import banking.api.dto.response.PublicProfile;
 import banking.api.dto.response.exception.NotFound;
 import banking.api.dto.response.exception.OperationNotAllowed;
 import banking.common.CurrencyConversionUtils;
-import banking.dao.ProfileDao;
+import banking.dao.impl.ProfileDaoImpl;
 import banking.dao.dataobject.ProfileDO;
 import banking.mappers.ProfileMapper;
 import com.google.inject.Inject;
@@ -16,11 +16,11 @@ import org.slf4j.LoggerFactory;
 
 @Singleton
 public class ProfileConsumer {
-    private final ProfileDao profileDao;
+    private final ProfileDaoImpl profileDao;
     private final Logger logger = LoggerFactory.getLogger(ProfileConsumer.class);
 
     @Inject
-    public ProfileConsumer(ProfileDao profileDao) {
+    public ProfileConsumer(ProfileDaoImpl profileDao) {
         this.profileDao = profileDao;
     }
 

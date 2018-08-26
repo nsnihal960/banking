@@ -1,9 +1,10 @@
-package banking.dao;
+package banking.dao.impl;
 
 import banking.api.dto.response.Profile;
 import banking.api.dto.response.exception.NotFound;
 import banking.api.dto.response.exception.OperationNotAllowed;
 import banking.common.CurrencyConversionUtils;
+import banking.dao.BalanceDao;
 import banking.dao.dataobject.BalanceDO;
 import banking.dao.dataobject.TransactionDO;
 import com.google.inject.Singleton;
@@ -21,7 +22,7 @@ import static banking.common.Constants.GLOBAL_CURRENCY;
 import static banking.common.Constants.USER_MAP_SIZE_DEFAULT;
 
 @Singleton
-public class AccountDao {
+public class BalanceDaoImpl implements BalanceDao {
     //short circuiting database here
     private Map<Long, List<TransactionDO>> statementMap = new ConcurrentHashMap<>(USER_MAP_SIZE_DEFAULT);
     private Map<Long, BalanceDO> balanceMap = new ConcurrentHashMap<>(USER_MAP_SIZE_DEFAULT);
@@ -35,26 +36,12 @@ public class AccountDao {
         }
     }
 
-    public List<TransactionDO> getTrimmedTransactions(Profile user,
-                                                      Long start,
-                                                      Long end,
-                                                      int pageCount) {
-        return getSubList(getTransaction(user),
-                start,
-                end,
-                pageCount);
+    public List<TransactionDO> getTrimmedTransactions(Profile user, Long start, Long end, int limit) {
+        return getSubList(getTransaction(user), start, end, limit);
     }
 
-    public List<TransactionDO> getTransaction(Profile user) {
-        if (!statementMap.containsKey(user.id)) {
-            statementMap.put(user.id, new ArrayList<>());
-        }
-        getOrCreateBalanceAndInstantiateLocks(user);
-        List<TransactionDO> transactions = statementMap.get(user.id);
-        return transactions;
-    }
-
-    public synchronized BalanceDO getOrCreateBalanceAndInstantiateLocks(Profile profile){
+    @Override
+    public synchronized BalanceDO getOrCreateBalance(Profile profile){
         BalanceDO balanceDO = balanceMap.get(profile.id);
         if(balanceDO == null){
             Long now = System.currentTimeMillis();
@@ -65,9 +52,10 @@ public class AccountDao {
         return balanceDO;
     }
 
+    @Override
     public TransactionDO addBalance(Profile user, Double amount, String currency){
         Long now = System.currentTimeMillis();
-        BalanceDO balanceDO = getOrCreateBalanceAndInstantiateLocks(user);
+        BalanceDO balanceDO = getOrCreateBalance(user);
         Double totalBalance;
         if(balanceDO == null){
             throw new NotFound("User Id cannot be located!");
@@ -79,20 +67,14 @@ public class AccountDao {
             balanceDO.setAmount(totalBalance);
             balanceDO.setUpdatedOn(now);
         }
-        return new TransactionDO(UUID.randomUUID().toString(),
-                null,
-                user.id,
-                now,
-                updateAmount,
-                currency,
-                CurrencyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY),
-                CREDIT,
-                totalBalance);
+        return new TransactionDO(UUID.randomUUID().toString(), null, user.id, now, updateAmount, currency,
+                CurrencyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY), CREDIT, totalBalance);
     }
 
+    @Override
     public TransactionDO deductBalance(Profile user, Double amount, String currency){
         Long now = System.currentTimeMillis();
-        BalanceDO balanceDO = getOrCreateBalanceAndInstantiateLocks(user);
+        BalanceDO balanceDO = getOrCreateBalance(user);
         Double totalBalance;
         if(balanceDO == null){
             throw new NotFound("User Id cannot be located!");
@@ -107,25 +89,20 @@ public class AccountDao {
             balanceDO.setAmount(totalBalance);
             balanceDO.setUpdatedOn(now);
         }
-        return new TransactionDO(UUID.randomUUID().toString(),
-                user.id,
-                null,
-                now,
-                updateAmount,
-                currency,
-                CurrencyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY),
-                DEBIT,
-                totalBalance);
+        return new TransactionDO(UUID.randomUUID().toString(), user.id, null, now, updateAmount, currency,
+                CurrencyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY), DEBIT, totalBalance);
     }
 
-    public Pair<TransactionDO, TransactionDO> transferBalance(Profile fromUser, Profile toUser, Double amount, String currency){
+    @Override
+    public Pair<TransactionDO, TransactionDO> transferBalance(Profile fromUser, Profile toUser, Double amount,
+                                                              String currency){
         String transactionId = UUID.randomUUID().toString();
         Long now = System.currentTimeMillis();
-        BalanceDO fromBalanceDO = getOrCreateBalanceAndInstantiateLocks(fromUser);
+        BalanceDO fromBalanceDO = getOrCreateBalance(fromUser);
         if(fromBalanceDO == null){
             throw new NotFound("Sender User Id cannot be located!");
         }
-        BalanceDO toBalanceDO = getOrCreateBalanceAndInstantiateLocks(toUser);
+        BalanceDO toBalanceDO = getOrCreateBalance(toUser);
         if(toBalanceDO == null){
             throw new NotFound("Receiver User Id cannot be located!");
         }
@@ -154,40 +131,31 @@ public class AccountDao {
             toTotalAmount = fromTotalAmount;
         }
         return new Pair<>(
-                new TransactionDO(transactionId,
-                        fromUser.id,
-                        toUser.id,
-                        now,
-                        updateAmount,
-                        currency,
-                        CurrencyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY),
-                        DEBIT,
-                        fromTotalAmount),
-                new TransactionDO(transactionId,
-                        fromUser.id,
-                        toUser.id,
-                        now,
-                        updateAmount,
-                        currency,
-                        CurrencyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY),
-                        CREDIT,
-                        toTotalAmount
-                ));
+                new TransactionDO(transactionId, fromUser.id, toUser.id, now, updateAmount, currency,
+                        CurrencyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY), DEBIT, fromTotalAmount),
+                new TransactionDO(transactionId, fromUser.id, toUser.id, now, updateAmount, currency,
+                        CurrencyConversionUtils.conversionRate(currency, GLOBAL_CURRENCY), CREDIT, toTotalAmount));
     }
 
-    private List<TransactionDO> getSubList(List<TransactionDO> list,
-                                           Long start,
-                                           Long end,
-                                           int pageCount) {
-        List<TransactionDO> transactions = new ArrayList<>(pageCount);
+    private static List<TransactionDO> getSubList(List<TransactionDO> list, Long start, Long end, int limit) {
+        List<TransactionDO> transactions = new ArrayList<>(limit);
         int count = 0;
-        for (int i = 0; i < list.size() && count < pageCount; i++) {
+        for (int i = 0; i < list.size() && count < limit; i++) {
             if (list.get(i).getTime() >= start
                     && list.get(i).getTime() < end) {
                 transactions.add(list.get(i));
                 count++;
             }
         }
+        return transactions;
+    }
+
+    private List<TransactionDO> getTransaction(Profile user) {
+        if (!statementMap.containsKey(user.id)) {
+            statementMap.put(user.id, new ArrayList<>());
+        }
+        getOrCreateBalance(user);
+        List<TransactionDO> transactions = statementMap.get(user.id);
         return transactions;
     }
 }

@@ -4,7 +4,7 @@ import banking.api.dto.response.Balance;
 import banking.api.dto.response.Profile;
 import banking.api.dto.response.Statement;
 import banking.common.CurrencyConversionUtils;
-import banking.dao.AccountDao;
+import banking.dao.impl.BalanceDaoImpl;
 import banking.dao.dataobject.BalanceDO;
 import banking.dao.dataobject.TransactionDO;
 import banking.mappers.BalanceMapper;
@@ -19,14 +19,14 @@ import java.util.List;
 
 @Singleton
 public class AccountConsumer {
-    private final AccountDao accountDao;
+    private final BalanceDaoImpl balanceDao;
     private final ProfileConsumer profileConsumer;
     private final Logger logger = LoggerFactory.getLogger(AccountConsumer.class);
 
     @Inject
-    public AccountConsumer(AccountDao accountDao,
+    public AccountConsumer(BalanceDaoImpl balanceDao,
                            ProfileConsumer profileConsumer) {
-        this.accountDao = accountDao;
+        this.balanceDao = balanceDao;
         this.profileConsumer = profileConsumer;
     }
 
@@ -34,8 +34,8 @@ public class AccountConsumer {
         logger.info("Received request to getStatement for user: {}, start : {}," +
                 " end: {}, count: {}", id, startTime, endTime, pageCount);
         Profile user = profileConsumer.getUserById(id);
-        List<TransactionDO> transactions = accountDao.getTrimmedTransactions(user,startTime,endTime,pageCount);
-        BalanceDO balance = accountDao.getOrCreateBalanceAndInstantiateLocks(user);
+        List<TransactionDO> transactions = balanceDao.getTrimmedTransactions(user,startTime,endTime,pageCount);
+        BalanceDO balance = balanceDao.getOrCreateBalance(user);
         Statement statement = StatementMapper.toStatementDto(
                 user,
                 BalanceMapper.balanceDoToDto(balance, user.currency),
@@ -48,7 +48,7 @@ public class AccountConsumer {
         logger.info("Received request to getBalance for user: {}", id);
         Profile user = profileConsumer.getUserById(id);
         Balance balance = BalanceMapper.balanceDoToDto(
-                accountDao.getOrCreateBalanceAndInstantiateLocks(user),
+                balanceDao.getOrCreateBalance(user),
                 user.currency
         );
         logger.info("Completed request to getBalance for user: {}", id);
@@ -61,7 +61,7 @@ public class AccountConsumer {
         currency = CurrencyConversionUtils.getFallBackCurrency(currency, profile);
         addTransaction(
                 userId,
-                accountDao.addBalance(profile, amount, currency)
+                balanceDao.addBalance(profile, amount, currency)
         );
         Balance balance = getBalance(userId);
         logger.info("Completed request to addBalance for user: {}", userId);
@@ -74,7 +74,7 @@ public class AccountConsumer {
         currency = CurrencyConversionUtils.getFallBackCurrency(currency, profile);
         addTransaction(
                 userId,
-                accountDao.deductBalance(profile, amount, currency)
+                balanceDao.deductBalance(profile, amount, currency)
         );
         Balance balance = getBalance(userId);
         logger.info("Completed request to deductBalance for user: {}", userId);
@@ -86,7 +86,7 @@ public class AccountConsumer {
         Profile fromUser = profileConsumer.getUserById(fromUserId);
         Profile toUser = profileConsumer.getUserById(toUserId);
         currency = CurrencyConversionUtils.getFallBackCurrency(currency, fromUser);
-        Pair<TransactionDO, TransactionDO> transactionPair = accountDao.transferBalance(fromUser, toUser, amount, currency);
+        Pair<TransactionDO, TransactionDO> transactionPair = balanceDao.transferBalance(fromUser, toUser, amount, currency);
         addTransaction(fromUser.id, transactionPair.getKey());
         addTransaction(toUser.id, transactionPair.getValue());
         Balance balance = getBalance(fromUser.id);
@@ -95,6 +95,6 @@ public class AccountConsumer {
     }
     private void addTransaction(Long userId, TransactionDO transaction){
         Profile user = profileConsumer.getUserById(userId);
-        accountDao.addTransaction(user, transaction);
+        balanceDao.addTransaction(user, transaction);
     }
 }
