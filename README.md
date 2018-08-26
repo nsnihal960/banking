@@ -23,6 +23,7 @@ APIs
 #### Request
 
 User can create profiles by providing registration details. Profiles are uniquely identified by mobile and email. So, appropriate validation are made on these fields. UserId generation is incremental from 1(Left here for simplicity in testing/evaluation; Not to be used in production, as it results in predicting user's Ids)
+
 ``
 curl -X POST http://localhost:8080/profiles
 ``
@@ -68,8 +69,8 @@ IsVerified is short circuited, but should be used to allow any transaction from/
 ``curl -X GET http://localhost:8080/profiles/{id}/``
 
 ``curl -X GET http://localhost:8080/profiles?code={code}&number={number}``
-```javascript
-```
+
+
 # Account
 ## getBalance
 ``curl -X GET http://localhost:8080/accounts/{id}``
@@ -78,7 +79,7 @@ IsVerified is short circuited, but should be used to allow any transaction from/
 Get statement is a paged API, with 3 parameters: `limit`, `startTime`, `endTime`. They have genuine defaults in case not provided. Response contains a pointer to next page information, clients can stop requesting if either no item received or page size is less than requested. The start-end time range is (inclusive, exclusive] in nature.
 
 #### Request
-``curl -X POST http://localhost:8080/accounts/{id}/limit={}&endTime=1535108770916&startTime=1535108770915``
+``curl -X GET http://localhost:8080/accounts/{id}/statement?limit={}&endTime=1535108770916&startTime=1535108770915``
 
 #### Response
 ```javascript
