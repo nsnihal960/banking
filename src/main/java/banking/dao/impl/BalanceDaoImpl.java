@@ -44,7 +44,7 @@ public class BalanceDaoImpl implements BalanceDao {
     public synchronized BalanceDO getOrCreateBalance(Profile profile){
         BalanceDO balanceDO = balanceMap.get(profile.id);
         if(balanceDO == null){
-            Long now = System.currentTimeMillis();
+            Long now = System.nanoTime()/1000;
             balanceDO = new BalanceDO(0.0, now, now);
             balanceMap.put(profile.id, balanceDO);
             lockMap.put(profile.id, new Object());
@@ -54,7 +54,7 @@ public class BalanceDaoImpl implements BalanceDao {
 
     @Override
     public TransactionDO addBalance(Profile user, Double amount, String currency){
-        Long now = System.currentTimeMillis();
+        Long now = System.nanoTime()/1000;
         BalanceDO balanceDO = getOrCreateBalance(user);
         Double totalBalance;
         if(balanceDO == null){
@@ -73,7 +73,7 @@ public class BalanceDaoImpl implements BalanceDao {
 
     @Override
     public TransactionDO deductBalance(Profile user, Double amount, String currency){
-        Long now = System.currentTimeMillis();
+        Long now = System.nanoTime()/1000;
         BalanceDO balanceDO = getOrCreateBalance(user);
         Double totalBalance;
         if(balanceDO == null){
@@ -97,7 +97,7 @@ public class BalanceDaoImpl implements BalanceDao {
     public Pair<TransactionDO, TransactionDO> transferBalance(Profile fromUser, Profile toUser, Double amount,
                                                               String currency){
         String transactionId = UUID.randomUUID().toString();
-        Long now = System.currentTimeMillis();
+        Long now = System.nanoTime()/1000;
         BalanceDO fromBalanceDO = getOrCreateBalance(fromUser);
         if(fromBalanceDO == null){
             throw new NotFound("Sender User Id cannot be located!");
