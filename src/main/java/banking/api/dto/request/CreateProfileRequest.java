@@ -1,18 +1,15 @@
 package banking.api.dto.request;
 
+import banking.api.dto.response.PublicProfile;
+import banking.api.dto.response.exception.ClientException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.apache.commons.lang3.StringUtils;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import javax.validation.constraints.NotNull;
-
-import banking.api.dto.response.PublicProfile;
-import banking.api.dto.response.exception.ClientException;
 
 public class CreateProfileRequest implements Request {
     public final PublicProfile profile;

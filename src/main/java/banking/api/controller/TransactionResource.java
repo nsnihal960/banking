@@ -1,15 +1,15 @@
 package banking.api.controller;
 
+import banking.api.dto.request.AddBalanceRequest;
+import banking.api.dto.request.DeductBalanceRequest;
+import banking.api.dto.request.TransferBalanceRequest;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import banking.api.dto.request.AddBalanceRequest;
-import banking.api.dto.request.DeductBalanceRequest;
-import banking.api.dto.request.TransferBalanceRequest;
 
 @Path("/transaction")
 @Consumes(MediaType.APPLICATION_JSON)

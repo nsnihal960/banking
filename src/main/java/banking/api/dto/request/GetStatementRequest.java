@@ -1,12 +1,11 @@
 package banking.api.dto.request;
 
+import banking.api.dto.response.exception.ClientException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import banking.api.dto.response.exception.ClientException;
 
 public class GetStatementRequest implements Request {
     public final Long id;

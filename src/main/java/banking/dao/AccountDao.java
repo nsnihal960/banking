@@ -1,20 +1,19 @@
 package banking.dao;
 
+import banking.api.dto.response.Profile;
 import banking.api.dto.response.exception.NotFound;
 import banking.api.dto.response.exception.OperationNotAllowed;
 import banking.common.CurrencyConversionUtils;
 import banking.dao.dataobject.BalanceDO;
+import banking.dao.dataobject.TransactionDO;
 import com.google.inject.Singleton;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import banking.api.dto.response.Profile;
-import banking.dao.dataobject.TransactionDO;
-import javafx.util.Pair;
 
 import static banking.api.dto.response.Transaction.TransactionType.CREDIT;
 import static banking.api.dto.response.Transaction.TransactionType.DEBIT;

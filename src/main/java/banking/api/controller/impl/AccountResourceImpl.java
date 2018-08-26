@@ -1,14 +1,12 @@
 package banking.api.controller.impl;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
-
 import banking.api.controller.AccountResource;
 import banking.api.dto.request.GetStatementRequest;
 import banking.consumer.AccountConsumer;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import javax.ws.rs.core.Response;
 
 @Singleton
 public class AccountResourceImpl implements AccountResource {

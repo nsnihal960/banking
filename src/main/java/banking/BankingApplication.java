@@ -1,19 +1,15 @@
 package banking;
 
+import banking.api.controller.AccountResource;
+import banking.api.controller.ProfileResource;
+import banking.api.controller.TransactionResource;
+import banking.api.controller.impl.AccountResourceImpl;
+import banking.api.controller.impl.ProfileResourceImpl;
+import banking.api.controller.impl.TransactionResouceImpl;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-
-import banking.api.controller.ProfileResource;
-import banking.api.controller.AccountResource;
-import banking.api.controller.TransactionResource;
-import banking.api.controller.impl.ProfileResourceImpl;
-import banking.api.controller.impl.AccountResourceImpl;
-import banking.api.controller.impl.TransactionResouceImpl;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -36,13 +32,6 @@ public class BankingApplication extends Application<BankingConfiguration> {
     public static void main(final String[] args) throws Exception {
         Injector injector = Guice.createInjector(new BankingModule());
         injector.getInstance(BankingApplication.class).run(args);
-    }
-
-    @Override
-    @GET
-    @Path("/data")
-    public String getName() {
-        return "Banking";
     }
 
     @Override

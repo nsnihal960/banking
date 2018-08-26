@@ -1,10 +1,10 @@
 package banking.mappers;
 
-import java.util.Date;
-
 import banking.api.dto.response.Transaction;
 import banking.common.CurrencyConversionUtils;
 import banking.dao.dataobject.TransactionDO;
+
+import java.util.Date;
 
 public class TransactionMapper {
     public static Transaction transactionDoToDto(TransactionDO transactionDO){

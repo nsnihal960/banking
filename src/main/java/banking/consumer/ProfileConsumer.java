@@ -1,11 +1,5 @@
 package banking.consumer;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import banking.api.dto.response.Mobile;
 import banking.api.dto.response.Profile;
 import banking.api.dto.response.PublicProfile;
@@ -15,6 +9,10 @@ import banking.common.CurrencyConversionUtils;
 import banking.dao.ProfileDao;
 import banking.dao.dataobject.ProfileDO;
 import banking.mappers.ProfileMapper;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class ProfileConsumer {

@@ -1,14 +1,14 @@
 package banking.mappers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import banking.api.dto.response.Balance;
 import banking.api.dto.response.Profile;
 import banking.api.dto.response.Statement;
 import banking.api.dto.response.Transaction;
 import banking.dao.dataobject.TransactionDO;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class StatementMapper {
     public static Statement toStatementDto(Profile profile, Balance balance, List<TransactionDO> transactionList) {

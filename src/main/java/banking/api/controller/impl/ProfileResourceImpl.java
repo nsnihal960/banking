@@ -1,16 +1,15 @@
 package banking.api.controller.impl;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
-import javax.validation.Valid;
-import javax.ws.rs.core.Response;
-
 import banking.api.controller.ProfileResource;
 import banking.api.dto.request.CreateProfileRequest;
 import banking.api.dto.response.Mobile;
 import banking.api.dto.response.Profile;
 import banking.consumer.ProfileConsumer;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import javax.validation.Valid;
+import javax.ws.rs.core.Response;
 
 @Singleton
 public class ProfileResourceImpl implements ProfileResource {

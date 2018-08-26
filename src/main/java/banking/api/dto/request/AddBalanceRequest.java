@@ -1,14 +1,12 @@
 package banking.api.dto.request;
 
+import banking.api.dto.response.exception.ClientException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import banking.api.dto.response.exception.ClientException;
 
 public class AddBalanceRequest implements Request {
     public final Long userId;

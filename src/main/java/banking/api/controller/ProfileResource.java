@@ -1,11 +1,11 @@
 package banking.api.controller;
 
+import banking.api.dto.request.CreateProfileRequest;
+
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import banking.api.dto.request.CreateProfileRequest;
 
 @Path("/profile")
 @Produces(MediaType.APPLICATION_JSON)

@@ -1,12 +1,12 @@
 package banking.common;
 
+import banking.api.dto.response.Profile;
+import banking.api.dto.response.exception.NotSupported;
+
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import banking.api.dto.response.Profile;
-import banking.api.dto.response.exception.NotSupported;
 
 public class CurrencyConversionUtils {
     private static Map<String, Double> exchange; //for USD
@@ -16,7 +16,7 @@ public class CurrencyConversionUtils {
         exchange = new HashMap<>();
         exchange.put("USD", 1.0);
         exchange.put("INR", 64.0);
-        exchange.put("GBP", 1.28);
+        exchange.put("GBP", 0.78);
         exchange.put("JPY", 110.50);
         exchange.put("AUD", 1.36);
 

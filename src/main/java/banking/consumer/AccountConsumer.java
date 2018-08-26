@@ -1,22 +1,21 @@
 package banking.consumer;
 
 import banking.api.dto.response.Balance;
-import banking.common.CurrencyConversionUtils;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
-import java.util.List;
-
 import banking.api.dto.response.Profile;
 import banking.api.dto.response.Statement;
+import banking.common.CurrencyConversionUtils;
 import banking.dao.AccountDao;
 import banking.dao.dataobject.BalanceDO;
 import banking.dao.dataobject.TransactionDO;
 import banking.mappers.BalanceMapper;
 import banking.mappers.StatementMapper;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 @Singleton
 public class AccountConsumer {

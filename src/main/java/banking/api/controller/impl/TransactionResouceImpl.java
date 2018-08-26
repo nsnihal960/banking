@@ -1,16 +1,15 @@
 package banking.api.controller.impl;
 
-import banking.consumer.AccountConsumer;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
-import javax.ws.rs.core.Response;
-
 import banking.api.controller.TransactionResource;
 import banking.api.dto.request.AddBalanceRequest;
 import banking.api.dto.request.DeductBalanceRequest;
 import banking.api.dto.request.TransferBalanceRequest;
 import banking.api.dto.response.Balance;
+import banking.consumer.AccountConsumer;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import javax.ws.rs.core.Response;
 
 @Singleton
 public class TransactionResouceImpl implements TransactionResource {

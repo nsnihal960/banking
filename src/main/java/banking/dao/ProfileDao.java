@@ -1,17 +1,16 @@
 package banking.dao;
 
+import banking.api.dto.response.Mobile;
+import banking.api.dto.response.Profile;
+import banking.api.dto.response.PublicProfile;
+import banking.dao.dataobject.ProfileDO;
+import banking.mappers.ProfileMapper;
 import com.google.inject.Singleton;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-
-import banking.api.dto.response.Mobile;
-import banking.api.dto.response.Profile;
-import banking.api.dto.response.PublicProfile;
-import banking.dao.dataobject.ProfileDO;
-import banking.mappers.ProfileMapper;
 
 @Singleton
 public class ProfileDao {
