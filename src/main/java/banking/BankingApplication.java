@@ -30,6 +30,7 @@ public class BankingApplication extends Application<BankingConfiguration> {
     }
 
     public static void main(final String[] args) throws Exception {
+        // This line initializes Google Guice dependancy injection
         Injector injector = Guice.createInjector(new BankingModule());
         injector.getInstance(BankingApplication.class).run(args);
     }
